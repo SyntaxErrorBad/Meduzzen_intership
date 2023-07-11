@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
-from config import MySettings
+from config import settings
 
 app = FastAPI()
 
@@ -21,4 +21,4 @@ def health_check(check):
     }
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host=MySettings().host,port=MySettings().port,reload=MySettings().reload)
+    uvicorn.run("main:app", host=settings.host,port=settings.port,reload=settings.reload)
