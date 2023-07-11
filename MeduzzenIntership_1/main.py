@@ -4,7 +4,7 @@ from config import settings
 
 app = FastAPI()
 
-@app.get("/health")
+@app.get("/")
 def health_check():
     return {
         "status_code": 200,
