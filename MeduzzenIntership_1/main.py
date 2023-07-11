@@ -4,18 +4,10 @@ from config import settings
 
 app = FastAPI()
 
-@app.get("/")
-def home():
+@app.get("/health")
+def health_check():
     return {
         "status_code": 200,
-        "detail" : "ok",
-        "result" : "working"
-        }
-
-@app.get("/health/{check}")
-def health_check(check):
-    return {
-        "status_code": check,
         "detail": "ok",
         "result": "working"
     }
