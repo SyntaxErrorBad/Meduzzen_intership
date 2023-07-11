@@ -7,3 +7,5 @@ class MySettings(BaseSettings):
 
     class Config:
         env_file = "../venv/.env"
+
+settings = MySettings()
