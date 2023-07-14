@@ -10,7 +10,7 @@ from dotenv import dotenv_values
 env_values = dotenv_values('.env')
 
 async def redisconnet():
-  return await rd.from_url(env_values.get('POSTGRES'))
+  return await rd.from_url(env_values.get('REDIS'))
 
 
 Base = declarative_base()
@@ -25,7 +25,7 @@ class Users(Base):
 
 
 async def postgersconn():
-  engine = create_engine('postgresql://admin:123456@postgres:5432/postgres')
+  engine = create_engine(env_values.get('POSTGRES'))
   Session = sessionmaker(bind=engine)
   Base.metadata.create_all(engine)
   return Session()
