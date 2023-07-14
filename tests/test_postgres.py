@@ -1,6 +1,6 @@
 import pytest
 import asyncio
-from sqlalchemy import create_engine, Column, Integer, String, text
+from sqlalchemy import create_engine, Column, Integer, String, text, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -15,10 +15,12 @@ class Person(Base):
 @pytest.fixture(scope="module")
 @pytest.mark.asyncio
 async def postgersconn():
-  engine = create_engine('postgresql://admin:123456@postgres:5432/postgres')
-  Session = sessionmaker(bind=engine)
-  Base.metadata.create_all(engine)
-  yield Session()
+    engine = create_engine('postgresql://admin:123456@postgres:5432/postgres')
+    Session = sessionmaker(bind=engine)
+    Base.metadata.create_all(engine)
+    yield Session()
+    metadata = MetaData(bind=engine)
+    metadata.drop_all(bind=engine)
 
 
 async def test_create_table(postgersconn):
