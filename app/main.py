@@ -38,8 +38,7 @@ async def postgersconn():
 
 
 async def redisconnet():
-  redis = await rd.from_url("redis://redis:6379")
-  return redis
+  return await rd.from_url("redis://redis:6379")
 
 
 
