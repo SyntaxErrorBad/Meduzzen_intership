@@ -1,16 +1,17 @@
 version: '3'
 services:
   core_api:
-    build: .
-    container_name:  "mcontainer"
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name:  "Task3"
     ports:
       - "8000:8080"
-
     volumes:
       - /app
       - /tests
       
-  test_runner:
+  test_runner_app:
     build:
       context: .
     command: pytest tests/test_main.py
@@ -18,3 +19,46 @@ services:
       - ./tests:/app/tests
     depends_on:
       - core_api
+
+  test_runner_postrgres:
+    build:
+      context: .
+    command: pytest tests/test_postgres.py
+    volumes:
+      - ./tests:/app/tests
+    depends_on:
+      - core_api
+      - postgres
+
+  test_runner_redis:
+    build:
+      context: .
+    command: pytest tests/test_redis.py
+    volumes:
+      - ./tests:/app/tests
+    depends_on:
+      - core_api
+      - redis
+
+
+
+  redis:
+    image: redis:latest
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - ./cache:/data
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - ./db:/app/db
