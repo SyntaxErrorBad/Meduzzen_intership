@@ -4,17 +4,18 @@ import asyncio
 import redis.asyncio as rd
 from sqlalchemy import create_engine, Column, Integer, String, text
 from sqlalchemy.ext.declarative import declarative_base
+from dotenv import dotenv_values
 
 
-
+env_values = dotenv_values('.env')
 
 async def redisconnet():
-  return await rd.from_url("redis://redis:6379")
+  return await rd.from_url(env_values.get('POSTGRES'))
 
 
 Base = declarative_base()
 
-class MyTable(Base):
+class Users(Base):
     __tablename__ = 'people'
 
     id = Column(Integer, primary_key=True)
