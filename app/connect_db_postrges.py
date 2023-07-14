@@ -6,10 +6,6 @@ from sqlalchemy import create_engine, Column, Integer, String, text
 from sqlalchemy.ext.declarative import declarative_base
 from app.main import settings
 
-async def redisconnet():
-  return await rd.from_url(settings.redis)
-
-
 Base = declarative_base()
 
 class Users(Base):
@@ -22,11 +18,9 @@ class Users(Base):
 
 
 async def postgersconn():
-  engine = create_engine(settings.postgres)
+  engine = create_engine(settings.postgers)
   Session = sessionmaker(bind=engine)
   Base.metadata.create_all(engine)
   return Session()
 
-
-redis = redisconnet()
 session = postgersconn()
