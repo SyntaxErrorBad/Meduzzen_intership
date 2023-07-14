@@ -19,7 +19,7 @@ class Person(Base):
 @pytest.fixture(scope="module")
 @pytest.mark.asyncio
 async def postgersconn():
-    engine = create_engine()
+    engine = create_engine(env_values.get('POSTGRES'))
     Session = sessionmaker(bind=engine)
     Base.metadata.create_all(engine)
     yield Session()
