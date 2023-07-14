@@ -14,33 +14,13 @@ services:
   test_runner_app:
     build:
       context: .
-    command: pytest tests/test_main.py
-    volumes:
-      - ./tests:/app/tests
-    depends_on:
-      - core_api
-
-  test_runner_postrgres:
-    build:
-      context: .
-    command: pytest tests/test_postgres.py
-    volumes:
-      - ./tests:/app/tests
-    depends_on:
-      - core_api
-      - postgres
-
-  test_runner_redis:
-    build:
-      context: .
-    command: pytest tests/test_redis.py
+    command: pytest tests/
     volumes:
       - ./tests:/app/tests
     depends_on:
       - core_api
       - redis
-
-
+      - postgres
 
   redis:
     image: redis:latest
