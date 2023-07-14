@@ -3,10 +3,8 @@ import asyncio
 from sqlalchemy import create_engine, Column, Integer, String, text, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from dotenv import dotenv_values
+from app.main import settings
 
-
-env_values = dotenv_values('.env')
 
 Base = declarative_base()
 
@@ -19,7 +17,7 @@ class Person(Base):
 @pytest.fixture(scope="module")
 @pytest.mark.asyncio
 async def postgersconn():
-    engine = create_engine(env_values.get('POSTGRES'))
+    engine = create_engine(settings.postgres)
     Session = sessionmaker(bind=engine)
     Base.metadata.create_all(engine)
     yield Session()
