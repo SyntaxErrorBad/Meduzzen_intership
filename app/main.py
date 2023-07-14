@@ -7,7 +7,8 @@ import redis.asyncio as rd
 from sqlalchemy import create_engine, Column, Integer, String, text
 from sqlalchemy.ext.declarative import declarative_base
 
-from conect_db import redis, session, Users
+from connect_db_postgres import session, Users
+from connect_db_redis import redis
 
 
 app = FastAPI()
