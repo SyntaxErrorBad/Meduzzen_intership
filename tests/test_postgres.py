@@ -14,16 +14,16 @@ class Person(Base):
 
 @pytest.fixture(scope="module")
 @pytest.mark.asyncio
-async def PostgersConn():
+async def postgersconn():
   engine = create_engine('postgresql://admin:123456@postgres:5432/postgres')
   Session = sessionmaker(bind=engine)
   Base.metadata.create_all(engine)
   yield Session()
 
 
-async def test_create_table(PostgersConn):
-    assert 'people1' in get_table_list(PostgersConn)
+async def test_create_table(postgersconn):
+    assert 'people1' in get_table_list(postgersconn)
 
-async def get_table_list(PostgersConn):
-    result = PostgersConn.execute(text("SELECT people FROM information_schema.tables WHERE table_schema='public'"))
+async def get_table_list(postgersconn):
+    result = postgersconn.execute(text("SELECT people FROM information_schema.tables WHERE table_schema='public'"))
     return [row[0] for row in result.fetchall()]
