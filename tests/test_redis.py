@@ -4,29 +4,28 @@ import redis.asyncio as rd
 
 @pytest.fixture(scope="module")
 @pytest.mark.asyncio
-async def RedisConnet():
-  redis = await rd.from_url("redis://redis:6379")
-  yield redis
+async def redisconnet():
+  yield await rd.from_url("redis://redis:6379")
   await asyncio.gather(
-      test_set_get(RedisConnet),
-       test_incr(RedisConnet),
-       test_delete(RedisConnet)
+      test_set_get(redisconnet),
+       test_incr(redisconnet),
+       test_delete(redisconnet)
   )
-  redis.flushall()
+  redisconnet().flushall()
 
-async def test_set_get(RedisConnet):
-    await RedisConnet.set('key', 'value')
-    result = await RedisConnet.get('key')
+async def test_set_get(redisconnet):
+    await redisconnet.set('key', 'value')
+    result = await redisconnet.get('key')
     assert result == b'value'
 
-async def test_incr(RedisConnet):
-    await RedisConnet.set('counter', 0)
-    await RedisConnet.incr('counter')
-    result = RedisConnet.get('counter')
+async def test_incr(redisconnet):
+    await redisconnet.set('counter', 0)
+    await redisconnet.incr('counter')
+    result = redisconnet.get('counter')
     assert int(result) == 1
 
-async def test_delete(RedisConnet):
-    await RedisConnet.set('key', 'value')
-    await RedisConnet.delete('key')
-    result = await RedisConnet.get('key')
+async def test_delete(redisconnet):
+    await redisconnet.set('key', 'value')
+    await redisconnet.delete('key')
+    result = await redisconnet.get('key')
     assert result is None
