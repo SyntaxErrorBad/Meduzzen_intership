@@ -9,7 +9,7 @@ from app.main import settings
 Base = declarative_base()
 
 class Users(Base):
-    __tablename__ = 'people'
+    __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
