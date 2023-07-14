@@ -30,14 +30,14 @@ class MyTable(Base):
 
 
 
-async def PostgersConn():
+async def postgersconn():
   engine = create_engine('postgresql://admin:123456@postgres:5432/postgres')
   Session = sessionmaker(bind=engine)
   Base.metadata.create_all(engine)
   return Session()
 
 
-async def RedisConnet():
+async def redisconnet():
   redis = await rd.from_url("redis://redis:6379")
   return redis
 
@@ -53,8 +53,8 @@ async def health_check():
 
 @app.get("/users")
 async def health_users():
-    redis = await RedisConnet()
-    session = await PostgersConn()
+    redis = await redisconnet()
+    session = await postgersconn()
     await redis.set("Fkey","Fvalue")
     result = session.execute(text("SELECT * FROM people"))
     value = await redis.get("Fkey")
