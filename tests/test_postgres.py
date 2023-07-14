@@ -26,8 +26,8 @@ async def postgersconn():
 
 
 async def test_create_table(postgersconn):
-    assert 'people1' in get_table_list(postgersconn)
+    assert 'person' in get_table_list(postgersconn)
 
 async def get_table_list(postgersconn):
-    result = postgersconn.execute(text("SELECT people FROM information_schema.tables WHERE table_schema='public'"))
+    result = postgersconn.execute(text("SELECT person FROM information_schema.tables WHERE table_schema='public'"))
     return [row[0] for row in result.fetchall()]
