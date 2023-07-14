@@ -7,7 +7,7 @@ import redis.asyncio as rd
 from sqlalchemy import create_engine, Column, Integer, String, text
 from sqlalchemy.ext.declarative import declarative_base
 
-from conect_db import redis, session
+from conect_db import redis, session, Users
 
 
 app = FastAPI()
@@ -33,7 +33,7 @@ async def health_check():
 @app.get("/users")
 async def health_users():
     await redis.set("Fkey","Fvalue")
-    result = session.execute(text("SELECT * FROM people"))
+    result = session.query(Users).all()
     value = await redis.get("Fkey")
     return {
         "status_code": 201,
