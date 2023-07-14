@@ -4,13 +4,10 @@ import asyncio
 import redis.asyncio as rd
 from sqlalchemy import create_engine, Column, Integer, String, text
 from sqlalchemy.ext.declarative import declarative_base
-from dotenv import dotenv_values
-
-
-env_values = dotenv_values('.env')
+from app.main import settings
 
 async def redisconnet():
-  return await rd.from_url(env_values.get('REDIS'))
+  return await rd.from_url(settings.redis)
 
 
 Base = declarative_base()
@@ -25,7 +22,7 @@ class Users(Base):
 
 
 async def postgersconn():
-  engine = create_engine(env_values.get('POSTGRES'))
+  engine = create_engine(settings.postgres)
   Session = sessionmaker(bind=engine)
   Base.metadata.create_all(engine)
   return Session()
