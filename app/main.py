@@ -7,6 +7,8 @@ import redis.asyncio as rd
 from sqlalchemy import create_engine, Column, Integer, String, text
 from sqlalchemy.ext.declarative import declarative_base
 
+from conect_db import redis, session
+
 
 app = FastAPI()
 
@@ -17,28 +19,6 @@ app.add_middleware(
     allow_methods=["*"], 
     allow_headers=["*"],  
 )
-
-
-Base = declarative_base()
-
-class MyTable(Base):
-    __tablename__ = 'people'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    age = Column(Integer)
-
-
-
-async def postgersconn():
-  engine = create_engine('postgresql://admin:123456@postgres:5432/postgres')
-  Session = sessionmaker(bind=engine)
-  Base.metadata.create_all(engine)
-  return Session()
-
-
-async def redisconnet():
-  return await rd.from_url("redis://redis:6379")
 
 
 
@@ -52,8 +32,6 @@ async def health_check():
 
 @app.get("/users")
 async def health_users():
-    redis = await redisconnet()
-    session = await postgersconn()
     await redis.set("Fkey","Fvalue")
     result = session.execute(text("SELECT * FROM people"))
     value = await redis.get("Fkey")
@@ -65,3 +43,4 @@ async def health_users():
             "Redis" : value.decode()
         }
     }
+    
