@@ -66,4 +66,3 @@ async def health_users():
             "Redis" : value.decode()
         }
     }
-    

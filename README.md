@@ -1,4 +1,4 @@
-#BE-2-init-application
+#BE-3-init-application
 Програма на запит на голову сторінку повертає:
 {
     "status_code": 200,
@@ -65,5 +65,3 @@
     docker-compose down
     ```
     Це зупинить додаток та контейнер.
-
-
