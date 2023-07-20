@@ -26,7 +26,7 @@ app.add_middleware(
 
 @app.get("/")
 async def health_check():
-    logger.info("Обробка запиту health_check")
+    logger.info("Processing the health_check request")
     return {
         "status_code": 200,
         "detail": "ok",
@@ -37,7 +37,7 @@ async def health_check():
 async def health_users():
     redis = await red
     postgressession = await session
-    logger.info("Обробка запиту health_users")
+    logger.info("Processing the health_users request")
     await redis.set("Fkey","Fvalue")
     result = postgressession.query(Users).all()
     value = await redis.get("Fkey")
