@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from pydantic import BaseModel
-from typing import List
 from ...config import settings
 
 Base = declarative_base()
@@ -18,25 +17,25 @@ class User(Base):
     last_name = Column(String(255))
 
 
-class SignInRequestModel(BaseModel):
+class UserAndPassword(BaseModel):
     username: str
     password: str
 
+class SignInRequestModel(UserAndPassword):
+    pass
 
-class SignUpRequestModel(BaseModel):
-    username: str
-    password: str
+
+class SignUpRequestModel(UserAndPassword):
     email: str
     name: str
     last_name: str
 
 
-class UserUpdateRequestModel(BaseModel):
-    username: str
+class UserUpdateRequestModel(UserAndPassword):
     email: str
     name: str
     last_name: str
 
 
-#class UsersListResponse(BaseModel):
-    #users: List[User]
+class UsersListResponse(BaseModel):
+    users: list(User)
