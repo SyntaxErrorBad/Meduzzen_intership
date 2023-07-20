@@ -1,13 +1,14 @@
 from pydantic_settings import BaseSettings
 
 class MySettings(BaseSettings):
-    host: str
-    port: int
-    reload: bool
-    postgres: str
-    redis: str
-
+    HOST: str
+    PORT: str
+    RELOAD: bool
+    POSTGRES: str
+    REDIS: str
+    POSTGRES_MIG: str
+    
     class Config:
-        env_file = "../venv/.env"
+        env_file = ".env"
 
 settings = MySettings()

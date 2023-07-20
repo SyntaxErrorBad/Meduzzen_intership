@@ -1,12 +1,12 @@
 import pytest
 import asyncio
 import redis.asyncio as rd
-from app.main import settings
+from app.config import settings
 
 @pytest.fixture(scope="module")
 @pytest.mark.asyncio
 async def redisconnet():
-  yield await rd.from_url(settings.redis)
+  yield await rd.from_url(settings.REDIS)
   await asyncio.gather(
       test_set_get(redisconnet),
        test_incr(redisconnet),

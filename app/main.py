@@ -7,8 +7,9 @@ import redis.asyncio as rd
 from sqlalchemy import create_engine, Column, Integer, String, text
 from sqlalchemy.ext.declarative import declarative_base
 
-from connect_db_postgres import session, Users
-from connect_db_redis import redis
+from app.connect_db_postgres import session, Users
+from app.connect_db_redis import redis as red
+from app.logs import logger
 
 
 app = FastAPI()
@@ -25,6 +26,7 @@ app.add_middleware(
 
 @app.get("/")
 async def health_check():
+    logger.info("Processing the health_check request")
     return {
         "status_code": 200,
         "detail": "ok",
@@ -33,8 +35,11 @@ async def health_check():
 
 @app.get("/users")
 async def health_users():
+    redis = await red
+    postgressession = await session
+    logger.info("Processing the health_users request")
     await redis.set("Fkey","Fvalue")
-    result = session.query(Users).all()
+    result = postgressession.query(Users).all()
     value = await redis.get("Fkey")
     return {
         "status_code": 201,
