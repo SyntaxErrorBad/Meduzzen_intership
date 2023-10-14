@@ -1,0 +1,61 @@
+version: '3'
+services:
+  core_api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: "Task4"
+    ports:
+      - "8000:8080"
+    volumes:
+      - ./app:/applicaton
+      - ./app/:/applicaton
+      - /tests:/applicaton
+    networks:
+      - my_network 
+    depends_on:
+      - postgres
+      - redis
+
+
+  test_runner_app:
+    build:
+      context: .
+    command: pytest tests/
+    volumes:
+      - ./:/app
+    depends_on:
+      - core_api
+      - redis
+      - postgres
+    networks:
+      - my_network 
+
+  redis:
+    image: redis
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - ./cache:/data
+    networks:
+      - my_network 
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - ./db:/applicaton/db
+    networks:
+      - my_network 
+
+networks:
+  my_network:
+    driver: bridge
